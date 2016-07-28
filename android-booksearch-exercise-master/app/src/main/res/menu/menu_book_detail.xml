@@ -9,6 +9,7 @@
         android:id="@+id/menu_item_share"
         app:showAsAction="always|withText"
         android:title="Share"
+        android:visible="true"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
 
 

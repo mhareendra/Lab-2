@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -61,6 +62,10 @@ public class BookDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
     }
 
     private Intent shareIntent;
@@ -94,7 +99,8 @@ public class BookDetailActivity extends AppCompatActivity {
         // Fetch reference to the share action provider
         miShareAction = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         attachShareIntentAction();
-        return true;
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     private ShareActionProvider miShareAction;

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.codepath.android.booksearch.R;
 import com.codepath.android.booksearch.adapters.BookAdapter;
@@ -46,9 +47,22 @@ public class BookListActivity extends AppCompatActivity {
         lvBooks.setAdapter(bookAdapter);
         // Fetch the data remotely
         fetchBooks("Oscar Wilde");
+        invalidateOptionsMenu();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupListItemListener();
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        if(miActionProgressItem!=null)
+            miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        if(miActionProgressItem!=null)
+            miActionProgressItem.setVisible(false);
     }
 
     private void setupListItemListener()
@@ -72,6 +86,7 @@ public class BookListActivity extends AppCompatActivity {
     // Converts them into an array of book objects and adds them to the adapter
     private void fetchBooks(String query) {
         client = new BookClient();
+        showProgressBar();
         client.getBooks(query, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -89,6 +104,7 @@ public class BookListActivity extends AppCompatActivity {
                             bookAdapter.add(book); // add book through the adapter
                         }
                         bookAdapter.notifyDataSetChanged();
+                        hideProgressBar();
                     }
                 } catch (JSONException e) {
                     // Invalid JSON format, show appropriate error.
@@ -103,8 +119,16 @@ public class BookListActivity extends AppCompatActivity {
         });
     }
 
-
-
+    MenuItem miActionProgressItem;
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
